@@ -79,7 +79,7 @@ cp_trade_no=xxx&**create_time=null**&package_name=xxx&pay_time=xxx&product_id=xx
 ### 常见错误码
 
 | 错误码 | 错误信息 |
-| ------ | ------ | ------ | ------ |
+| ------ | ------ | 
 | 211012	| 应用未签署有效合同 |
 | 211014	| apk签名/开发者签名key为空 |
 | 211013	| 应用签名不合法 |
