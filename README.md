@@ -27,7 +27,7 @@ https://api-lichee.meizu.com/api/order/query
 
 | 参数名 | 数据类型 | 是否必填 | 说明 |
 | ------ | ------ | ------ | ------ |
-| package_name	| String | 是 | 应用包名
+| packageName	| String | 是 | 应用包名
 | cp_trace_no	| String | 是 | CP订单ID
 | trace_no	| String | 是 | sdk订单ID
 | total_fee	| Double | 是 | 订单金额(CP需校验是否一致)
@@ -38,7 +38,10 @@ https://api-lichee.meizu.com/api/order/query
 
 ## 2.CP 接收发货通知接口：（后台填写的回调接口）
 
-__注意：回调接口请求方式为 `POST`，为防止伪造数据请求，请在收到通知时多重校验，推荐如下： sign验证+调用订单查询接口验证状态__
+__注意：
+ 1. 回调地址在开发者后台填写，暂时只支持应用上架前修改，上架后请在沟通群联系魅族同学修改
+ 2. 回调地址必须为post请求，且能正常访问时才能在开发者后台保存
+ 3. 回调接口请求方式为 `POST`，为防止伪造数据请求，请在收到通知时多重校验，推荐如下： sign验证+调用订单查询接口验证状态
 
 ### 请求参数
 | 参数名 | 数据类型 | 是否必填 | 说明 |
