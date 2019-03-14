@@ -2,8 +2,9 @@
 
 魅族联运服务端接入 Demo。演示了如何查询订单与接收发货通知。
 
-## 1.订单查询接口
-
+## 1.订单查询接口 
+### 请求方式
+get 请求
 ### 接口url
 
 https://api-lichee.meizu.com/api/order/query
@@ -34,6 +35,23 @@ https://api-lichee.meizu.com/api/order/query
 | product_id | String | 是 | 产品ID(下单时CP上传)
 | pay_time	| Long | 是 | 支付时间
 | trade_status	| int | 是 | 订单状态：[1:新建/2:预支付/3:预支付创建失败/4:支付成功]
+
+### 接口返回实例
+{
+	"code": 200,
+	"message": "",
+	"redirect": "",
+	"value": {
+		"cp_trade_no": "1534994759572", // 接入方订单编号
+		"packageName": "com.meizu.mstore.sdk.demo", // 包名
+		"pay_time": 0, // 订单完成时间 
+		"product_id": "153499", // 商品id 
+		"total_fee": 0.2,  // 订单支付总金额  
+		"trade_no": "1534994759572", // 魅族订单号
+		"trade_status": 2 // 订单状态 [1:新建/2:预支付/3:预支付创建失败/4:支付成功]
+	}
+}
+
 
 
 ## 2.CP 接收发货通知接口：（后台填写的回调接口）
