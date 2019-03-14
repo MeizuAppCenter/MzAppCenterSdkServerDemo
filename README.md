@@ -29,36 +29,39 @@ https://api-lichee.meizu.com/api/order/query
 | 参数名 | 数据类型 | 是否必填 | 说明 |
 | ------ | ------ | ------ | ------ |
 | packageName	| String | 是 | 应用包名
-| cp_trace_no	| String | 是 | CP订单ID
-| trace_no	| String | 是 | sdk订单ID
+| cp_trade_no	| String | 是 | CP订单ID
+| trade_no	| String | 是 | 魅族sdk订单ID
 | total_fee	| Double | 是 | 订单金额(CP需校验是否一致)
 | product_id | String | 是 | 产品ID(下单时CP上传)
 | pay_time	| Long | 是 | 支付时间
 | trade_status	| int | 是 | 订单状态：[1:新建/2:预支付/3:预支付创建失败/4:支付成功]
 
 ### 接口返回实例
-`` `
+
+```
 {
 	"code": 200,
 	"message": "",
 	"redirect": "",
 	"value": {
-		"cp_trade_no": "1534994759572", // 接入方订单编号
+		"cp_trade_no": "1534994759572", // CP订单ID
 		"packageName": "com.meizu.mstore.sdk.demo", // 包名
 		"pay_time": 0, // 订单完成时间 
 		"product_id": "153499", // 商品id 
 		"total_fee": 0.2,  // 订单支付总金额  
-		"trade_no": "1534994759572", // 魅族订单号
+		"trade_no": "1534994759572", // 魅族sdk订单号
 		"trade_status": 2 // 订单状态 [1:新建/2:预支付/3:预支付创建失败/4:支付成功]
 	}
 }
-` ``
+```
+
 ## 2.CP 接收发货通知接口：（后台填写的回调接口）
 
 __注意：
  1. 回调地址在开发者后台填写，暂时只支持应用上架前修改，上架后请在沟通群联系魅族同学修改
  2. 回调地址必须为post请求，且能正常访问时才能在开发者后台保存
  3. 回调接口请求方式为 `POST`，为防止伪造数据请求，请在收到通知时多重校验，推荐如下： sign验证+调用订单查询接口验证状态
+ 4. 回调接口处理逻辑可参考提供的java demo
 
 ### 请求参数
 | 参数名 | 数据类型 | 是否必填 | 说明 |
@@ -103,3 +106,4 @@ cp_trade_no=xxx&**create_time=null**&package_name=xxx&pay_time=xxx&product_id=xx
 | 211012	| 应用未签署有效合同 |
 | 211014	| apk签名/开发者签名key为空 |
 | 211013	| 应用签名不合法 |
+
