@@ -37,6 +37,7 @@ https://api-lichee.meizu.com/api/order/query
 | trade_status	| int | 是 | 订单状态：[1:新建/2:预支付/3:预支付创建失败/4:支付成功]
 
 ### 接口返回实例
+`` `
 {
 	"code": 200,
 	"message": "",
@@ -51,9 +52,7 @@ https://api-lichee.meizu.com/api/order/query
 		"trade_status": 2 // 订单状态 [1:新建/2:预支付/3:预支付创建失败/4:支付成功]
 	}
 }
-
-
-
+` ``
 ## 2.CP 接收发货通知接口：（后台填写的回调接口）
 
 __注意：
