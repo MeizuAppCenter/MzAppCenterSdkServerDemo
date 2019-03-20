@@ -6,6 +6,7 @@ public class OrderAction {
 
 	private static final Logger logger = LoggerFactory.getLogger( OrderAction.class );
 
+	private static final MEI_ZU_QUERY_URI = "https://api-lichee.meizu.com/api/order/query?package_name=%s&cp_trade_no=%s&ts=%s&sign=%s";
 
 	@ResponseBody
 	@RequestMapping(value = {"/order/notify"}, method = RequestMethod.POST)
@@ -41,15 +42,40 @@ public class OrderAction {
 
 		if (sign.equals(SignUtils.signUrl(paramMap,appKey))) {
 
-			// todo 调用查询接口 验证订单状态; 根据业务需要做后续处理
+            try {
+                // 调用query接口
+                String orderInfo = query(paramMap,appKey);
+                // todo 验证订单 && 根据业务需要做后续处理
+            } catch (Exception e) {
+                logger.error("invoke meizu order query api failed",e);
+            }
+
 		} else {
 
-      // todo 异常处理
+              // todo 异常处理
 		}
 
 		// todo 按照文档返回信息，反馈是否收到回调
 		return null;
 	}
+
+	// 调用query接口获取查询数据
+    private String query(Map<String,Object> paramMap,String appKey) throws Exception{
+
+        signParams.put( "package_name", paramMap.get("packageName"));
+        signParams.put( "cp_trade_no", paramMap.get("cp_trade_no"));
+        signParams.put( "ts", System.currentTimeMillis());
+        signParams.put("sign",SignUtils.signUrl(signParams,appKey));
+
+        queryUrl = String.format(MEI_ZU_QUERY_URI, signParams.get("package_name"), signParams.get("cp_trade_no"), signParams.get("ts"), signParams.get("sign"));
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(queryUrl);
+        CloseableHttpResponse response = httpclient.execute(httpget);
+        return EntityUtils.toString(response.getEntity());
+    }
+
+
+
 
 
 

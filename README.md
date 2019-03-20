@@ -36,8 +36,8 @@ https://api-lichee.meizu.com/api/order/query
 | pay_time	| Long | 是 | 支付时间
 | trade_status	| int | 是 | 订单状态：[1:新建/2:预支付/3:预支付创建失败/4:支付成功]
 
-### 接口返回实例
-
+### 接口返回示例
+正常访问结果如下,如果出现value为空的情况,则是未查询到订单信息 请检查订单号
 ```
 {
 	"code": 200,
