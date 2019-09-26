@@ -19,14 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * 此代码为示例代码
- * 用于处理魅族支付回调
+ * 此代码为示例代码 用于处理魅族支付回调 
+ * cp可按照自己的的需要进行全部或部分改写
+ * 最终的返回格式必须是 {"code":200/非200,"message":""} 
+ * code为200时 表示回调成功, code为非200时,表示回调失败,后续会有一定规则重试
+ *  
  */
 @Controller
 @RequestMapping("/api")
@@ -49,18 +51,23 @@ public class NotifyAction {
 
 		// 读取流数据
 		TreeMap<String, String> paramMap = parseParams(request);
+		// 无参时 请按照下面的格式返回,不要直接报错
+		if (MapUtils.isEmpty(paramMap)) {
+			LOGGER.error("notify failed for params is empty");
+			return new ResponseEntity(ResponseErrorCode.INVALID_PARAM, "params not correct");
+		}
 
 		// 验证签名
 		String sign = sign(paramMap);
 		if (!StringUtils.equalsIgnoreCase(sign, String.valueOf(paramMap.get("sign")))) {
 			LOGGER.error("notify failed for sign not equal.params:[{}]", JSON.toJSONString(paramMap));
-			return new ResponseEntity(ResponseErrorCode.APP_SIGN_ERROR,"sign not correct");
+			return new ResponseEntity(ResponseErrorCode.APP_SIGN_ERROR, "sign not correct");
 		}
 
 		// 调用魅族订单查询接口确认订单状态
 		if (!checkFromMeizu(paramMap.get("package_name"), paramMap.get("cp_trade_no"), NumberUtils.toInt(paramMap.get("trade_status")))) {
 			LOGGER.error("notify failed for check order from meizu error.params:[{}]", JSON.toJSONString(paramMap));
-			return new ResponseEntity(ResponseErrorCode.STATUS_NOT_CORRECT,"query status not equals notify status");
+			return new ResponseEntity(ResponseErrorCode.STATUS_NOT_CORRECT, "query status not equals notify status");
 		}
 
 		// 后置处理
@@ -74,6 +81,7 @@ public class NotifyAction {
 
 	/**
 	 * 此方法用于处理cp自有业务逻辑 请自行根据需求实现
+	 *
 	 * @param paramMap
 	 * @return
 	 */
@@ -132,14 +140,15 @@ public class NotifyAction {
 			}
 		}
 		String finalSignString = sb.deleteCharAt(sb.length() - 1).append(":").append(APP_KEY).toString();
-			if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("final sign string:[{}]",finalSignString);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("final sign string:[{}]", finalSignString);
 		}
 		return MD5Utils.digest(finalSignString, "utf-8");
 	}
 
 	/**
 	 * 调用魅族query接口查询订单详情
+	 *
 	 * @param packageName
 	 * @param cpTradeNo
 	 * @param tradeStatus
@@ -154,7 +163,7 @@ public class NotifyAction {
 		signParams.put("ts", String.valueOf(System.currentTimeMillis()));
 		signParams.put("sign", sign(signParams));
 		String queryUrl = String.format(MEIZU_QUERY_URL, packageName, cpTradeNo, signParams.get("ts"), signParams.get("sign"));
-		JSONObject response = JSON.parseObject(httpScratcher.doHttpGet(queryUrl,null));
+		JSONObject response = JSON.parseObject(httpScratcher.doHttpGet(queryUrl, null));
 		if (response == null || response.getIntValue("code") != 200) {
 			LOGGER.error("notify failed for response is not correct", response);
 			return false;
@@ -168,7 +177,6 @@ public class NotifyAction {
 
 		return true;
 	}
-
 
 
 }
