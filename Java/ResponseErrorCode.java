@@ -16,4 +16,9 @@ public interface ResponseErrorCode {
 	 * 订单状态不正确
 	 */
 	int STATUS_NOT_CORRECT = START + 2;
+	
+	/**
+	 * 参数不正确
+	 */
+	int INVALID_PARAM = START + 3;
 }
