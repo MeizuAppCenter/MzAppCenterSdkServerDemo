@@ -26,9 +26,6 @@
 
 - [魅族开放平台-应用联运](http://developer.meizu.com/console/reports/appBillingDetail)
 
-  ![image-20201124160116293](/Users/meizu/Library/Application Support/typora-user-images/image-20201124160116293.png)
-
-
 
 # 结算
 
