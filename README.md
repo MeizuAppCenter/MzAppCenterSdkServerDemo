@@ -20,7 +20,7 @@
 
 -  [准备工作](http://open-wiki.flyme.cn/doc-wiki/index#id?119)
 
--  [ SDK接入](http://open-wiki.flyme.cn/doc-wiki/index#id?119)
+-  [ SDK接入](https://github.com/MeizuAppCenter/MzAppCenterSdkDemo)
 
 # 查询
 
